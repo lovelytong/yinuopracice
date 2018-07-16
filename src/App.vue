@@ -5,28 +5,95 @@
         <el-col class="header-title" :span="4">
           <div>PROJECT<span style="color: cornflowerblue">BOX</span></div>
         </el-col>
-        <el-col :span="12" class="header-title">
+        <el-col :span="14" class="header-title">
           <div></div>
         </el-col>
         <el-col class="header-icon" :span="3">
-          <div><i class="el-icon-tickets"></i></div>
-          <div><i class="el-icon-message"></i></div>
-          <div><i class="el-icon-bell"></i></div>
+          <img src="@/assets/header1.png">
         </el-col>
         <el-col class="header-admin" :span="3">
-          <div><i class="el-icon-tickets"></i></div>
-          <div>Project Admin</div>
-          <div><i class="el-icon-arrow-down"></i></div>
+          <img src="@/assets/header2.png">
         </el-col>
       </el-row>
     </div>
-    <router-view/>
+    <el-row>
+      <el-col :span="5">
+        <div class="menu-background">
+          <div class="menu">
+            <ul>
+              <li v-for="item in menuData1">
+                <div class="main-item">
+                  <div>
+                    <i class="el-icon-edit"></i>
+                    {{item.text}}
+                  </div>
+                  <div>+</div>
+                </div>
+
+              </li>
+              <div style="background-color: #445C74;color:white;">
+                <div>
+                  <div><i class="el-icon-edit"></i></div>
+                  <div>Team</div>
+                </div>
+                <div>2</div>
+              </div>
+              <li v-for="item in menuData2">
+                <div class="main-item">
+                  <div>
+                    <i class="el-icon-edit"></i>
+                    {{item.text}}
+                  </div>
+                  <div>+</div>
+                </div>
+
+              </li>
+            </ul>
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="19" class="main">
+        <router-view/>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  data: function () {
+    return {
+      menuData1: [
+        {
+          text: 'Dashboard'
+        },
+        {
+          text: 'Calendar'
+        },
+        {
+          text: 'Tasks'
+        },
+        {
+          text: 'File Manager'
+        }
+      ],
+      menuData2: [
+        {
+          text: 'Time Logger'
+        },
+        {
+          text: 'Discuss'
+        },
+        {
+          text: 'Tickets'
+        },
+        {
+          text: 'Accounting'
+        }
+      ]
+    }
+  }
 }
 </script>
 
@@ -35,7 +102,6 @@ export default {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    height: 100%;
   }
 
   * {
@@ -48,7 +114,7 @@ export default {
   }
 
   .header-container {
-    margin: 30px 50px 0 50px;
+    margin: 10px 50px 0 50px;
   }
 
   .header-title {
@@ -74,4 +140,38 @@ export default {
     align-items: center;
     height: 60px;
   }
+
+  .menu {
+    height: 700px;
+    background-color: #658bb1;
+    padding-top: 15px;
+  }
+
+  .menu-background {
+    background-color: white;
+    padding-left: 50px;
+  }
+
+  .el-table thead {
+    background-color: red;
+  }
+
+  .menu ul {
+    list-style-type : none;
+  }
+
+  .menu li {
+    color: white;
+    font-size: 16px;
+    font-weight: bolder;
+    margin: 20px;
+
+  }
+
+  .main-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
 </style>
