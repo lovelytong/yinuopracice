@@ -9,6 +9,32 @@
 
       </el-breadcrumb>
     </div>
+    <el-dialog
+      title="Add User"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose"
+    >
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="80px" class="demo-ruleForm">
+        <el-form-item label="Email" prop="email">
+          <el-input v-model="ruleForm.email"></el-input>
+        </el-form-item>
+        <el-form-item label="Username" prop="username">
+          <el-input v-model="ruleForm.username"></el-input>
+        </el-form-item>
+        <el-form-item label="Name" prop="name">
+          <el-input v-model="ruleForm.name"></el-input>
+        </el-form-item>
+        <el-form-item label="Group" prop="group">
+          <el-input v-model="ruleForm.group"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="resetForm">重 置</el-button>
+      <el-button @click="dialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="submitForm">确 定</el-button>
+      </span>
+    </el-dialog>
     <div class="content-table">
       <div>
         <div class="table-above">
@@ -16,7 +42,7 @@
             <img src="@/assets/content1.png"/>
           </div>
           <div>
-            <el-button type="primary" size="mini">Add User</el-button>
+            <el-button type="primary" size="mini" @click="dialogVisible = true">Add User</el-button>
           </div>
         </div>
         <hr>
@@ -79,10 +105,54 @@ export default {
         username: 'test',
         name: 'test test2',
         group: 'Admin'
-      }]
+      }],
+      dialogVisible: false,
+      ruleForm: {
+        email: '',
+        username: '',
+        name: '',
+        group: ''
+      },
+      rules: {
+        email: [
+          {required: true, message: '请输入内容', trigger: 'blur'}
+        ],
+        username: [
+          {required: true, message: '请输入内容', trigger: 'blur'}
+        ],
+        name: [
+          {required: true, message: '请输入内容', trigger: 'blur'}
+        ],
+        group: [
+          {required: true, message: '请输入内容', trigger: 'blur'}
+        ]
+      }
     }
   },
-  methods: {}
+  methods: {
+    submitForm () {
+      this.dialogVisible = false;
+      this.$refs.ruleForm.validate((valid) => {
+        if (valid) {
+          alert('submit!');
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+    resetForm () {
+      console.log(this)
+      this.$refs.ruleForm.resetFields();
+    },
+    handleClose(done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
+    }
+  }
 }
 </script>
 
@@ -119,6 +189,10 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .demo-ruleForm {
+
   }
 
 </style>

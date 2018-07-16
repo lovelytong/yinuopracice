@@ -32,17 +32,31 @@
 
               </li>
               <div style="background-color: #445C74;color:white;">
-                <div>
-                  <div><i class="el-icon-edit"></i></div>
-                  <div>Team</div>
+                <div class="team-title">
+                  <div>
+                    <i class="el-icon-edit"></i>
+                    Team
+                  </div>
+                  <div>+</div>
                 </div>
-                <div>2</div>
+                <div class="team-content">
+                  <div class="team-content-li" style="color: #56C7F2">
+                    <i class="el-icon-arrow-right"></i>&#8195;
+                    Manage</div>
+                  <div class="team-content-li" style="padding-bottom: 15px">
+                    <i class="el-icon-arrow-right"></i>&#8195;
+                    Groups
+                  </div>
+                </div>
               </div>
               <li v-for="item in menuData2">
                 <div class="main-item">
                   <div>
-                    <i class="el-icon-edit"></i>
-                    {{item.text}}
+                    <div>
+                      <i class="el-icon-edit"></i>
+                      {{item.text}}
+                    </div>
+
                   </div>
                   <div>+</div>
                 </div>
@@ -172,6 +186,20 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+  .team-title {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px 10px;
+    font-weight: bolder;
+  }
+  .team-content{
+    width: 100%;
+    background-color:#587899 ;
+    font-weight: bolder;
+  }
+  .team-content-li{
+    padding:15px 10px 0 40px;
   }
 
 </style>
