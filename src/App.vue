@@ -20,49 +20,47 @@
       <el-col :span="5">
         <div class="menu-background">
           <div class="menu">
-            <ul>
-              <li v-for="item in menuData1">
-                <div class="main-item">
+            <div v-for="item in menuData1" :key="item.id">
+              <div class="main-item">
+                <div>
+                  <i class="el-icon-edit"></i>
+                  {{item.text}}
+                </div>
+                <div>+</div>
+              </div>
+            </div>
+            <div style="background-color: #445C74;color:white;margin:10px 0;">
+              <div class="team-title" @click="toggleMenu">
+                <div>
+                  <i class="el-icon-edit"></i>
+                  Team
+                </div>
+                <div>+</div>
+              </div>
+              <div class="team-content" v-if="menushow">
+                <div class="team-content-li" style="color: #56C7F2">
+                  <i class="el-icon-arrow-right"></i>&#8195;
+                  Manage</div>
+                <div class="team-content-li" style="padding-bottom: 15px">
+                  <i class="el-icon-arrow-right"></i>&#8195;
+                  Groups
+                </div>
+              </div>
+            </div>
+            <div v-for="item in menuData2" :key="item.id">
+              <div class="main-item">
+                <div>
                   <div>
                     <i class="el-icon-edit"></i>
                     {{item.text}}
                   </div>
-                  <div>+</div>
-                </div>
 
-              </li>
-              <div style="background-color: #445C74;color:white;">
-                <div class="team-title">
-                  <div>
-                    <i class="el-icon-edit"></i>
-                    Team
-                  </div>
-                  <div>+</div>
                 </div>
-                <div class="team-content">
-                  <div class="team-content-li" style="color: #56C7F2">
-                    <i class="el-icon-arrow-right"></i>&#8195;
-                    Manage</div>
-                  <div class="team-content-li" style="padding-bottom: 15px">
-                    <i class="el-icon-arrow-right"></i>&#8195;
-                    Groups
-                  </div>
-                </div>
+                <div>+</div>
               </div>
-              <li v-for="item in menuData2">
-                <div class="main-item">
-                  <div>
-                    <div>
-                      <i class="el-icon-edit"></i>
-                      {{item.text}}
-                    </div>
 
-                  </div>
-                  <div>+</div>
-                </div>
+            </div>
 
-              </li>
-            </ul>
           </div>
         </div>
       </el-col>
@@ -78,35 +76,52 @@ export default {
   name: 'App',
   data: function () {
     return {
+      menushow: true,
       menuData1: [
         {
+          id: 0,
           text: 'Dashboard'
         },
         {
+          id: 1,
           text: 'Calendar'
         },
         {
+          id: 2,
           text: 'Tasks'
         },
         {
+          id: 3,
           text: 'File Manager'
         }
       ],
       menuData2: [
         {
+          id: 4,
           text: 'Time Logger'
         },
         {
+          id: 5,
           text: 'Discuss'
         },
         {
+          id: 6,
           text: 'Tickets'
         },
         {
+          id: 7,
           text: 'Accounting'
         }
       ]
     }
+  },
+  methods: {
+    toggleMenu () {
+      this.menushow = !this.menushow
+    }
+  },
+  mounted () {
+
   }
 }
 </script>
@@ -116,6 +131,7 @@ export default {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    user-select: none;
   }
 
   * {
@@ -137,6 +153,7 @@ export default {
     align-items: center;
     height: 60px;
     border-right: 2px solid #eeeeee;
+    cursor: pointer;
   }
 
   .header-icon {
@@ -146,6 +163,7 @@ export default {
     height: 60px;
     border-right: 2px solid #eeeeee;
     font-size: 30px;
+    cursor: pointer;
   }
 
   .header-admin {
@@ -153,10 +171,11 @@ export default {
     justify-content: space-around;
     align-items: center;
     height: 60px;
+    cursor: pointer;
   }
 
   .menu {
-    height: 700px;
+    height: calc(100vh - 90px);
     background-color: #658bb1;
     padding-top: 15px;
   }
@@ -170,33 +189,27 @@ export default {
     background-color: red;
   }
 
-  .menu ul {
-    list-style-type : none;
-  }
-
-  .menu li {
-    color: white;
-    font-size: 16px;
-    font-weight: bolder;
-    margin: 20px;
-
-  }
-
   .main-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 20px;
+    color: white;
+    font-size: 16px;
+    font-weight: bolder;
   }
   .team-title {
     display: flex;
     justify-content: space-between;
     padding: 10px 20px 10px;
     font-weight: bolder;
+    cursor: pointer;
   }
   .team-content{
     width: 100%;
     background-color:#587899 ;
     font-weight: bolder;
+    cursor: pointer;
   }
   .team-content-li{
     padding:15px 10px 0 40px;
