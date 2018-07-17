@@ -1,9 +1,11 @@
 <template>
   <div class="main">
-    <!--提交表单后的提示框，正常情况下隐藏，提交表单成功或者失败给出提示，三秒后再次隐藏-->
-    <div class="message-box" v-if="boxShow">
-      <div><span style="font-weight: bolder">Notice:</span>{{boxMessage}}</div>
-    </div>
+    <!--提示框，正常情况下隐藏，提交表单成功或者失败给出提示，三秒后再次隐藏,带有淡出的动画效果-->
+    <transition name="fade">
+      <div class="message-box" v-if="boxShow">
+        <div><span style="font-weight: bolder">Notice:</span>{{boxMessage}}</div>
+      </div>
+    </transition>
     <!--模态框，里面是表格数据增加和修改的表单，点击新增和修改的时候出现-->
     <el-dialog
       :title="dialogName"
@@ -26,7 +28,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="resetForm" size="mini">RESET</el-button>
+        <el-button @click="resetForm" size="mini" v-if="submitButton">RESET</el-button>
       <el-button @click="cancelDialog" size="mini">CANCEL</el-button>
       <el-button type="primary" @click="submitForm" v-if="submitButton" size="mini">SUBMIT</el-button>
         <el-button type="primary" @click="updateForm" v-if="updateButton" size="mini">UPDATE</el-button>
@@ -57,7 +59,7 @@
           :data="tableData"
           border
           style="width: 100%"
-          :header-cell-style="{backgroundColor:'#e7e9ec'}"
+          :header-cell-style="{backgroundColor:'#F0F0F0'}"
           header-row-class-name="test"
         >
           <el-table-column
@@ -164,12 +166,13 @@ export default {
     },
     // 点击编辑按钮
     handleEdit (index, row) {
-      this.ruleForm = row
+      this.ruleForm = JSON.parse(JSON.stringify(row))
       this.editRow = index
       this.updateButton = true
       this.submitButton = false
       this.dialogName = 'Update User'
       this.dialogVisible = true
+      this.$refs.ruleForm.resetFields()
     },
     // 点击删除按钮
     handleDelete (index) {
@@ -186,8 +189,7 @@ export default {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           isValid = true
-          this.tableData.splice(this.editRow, 1, this.ruleForm)
-          console.log(this.tableData[this.editRow])
+          this.tableData.splice(this.editRow, 1, JSON.parse(JSON.stringify(this.ruleForm)))
           this.boxShow = true
           this.boxMessage = 'update success!!'
         } else {
@@ -201,7 +203,6 @@ export default {
       if (!isValid) {
         return
       }
-      // this.$refs.ruleForm.resetFields()
       this.dialogVisible = false
     },
     // 点击模态框里的submit按钮
@@ -212,7 +213,7 @@ export default {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           isValid = true
-          this.tableData.push(obj)
+          this.tableData.unshift(obj)
           this.boxShow = true
           this.boxMessage = 'The user was added to project!'
         } else {
@@ -226,7 +227,6 @@ export default {
       if (!isValid) {
         return
       }
-      this.$refs.ruleForm.resetFields()
       this.dialogVisible = false
     },
     // 表单重置
@@ -241,15 +241,19 @@ export default {
     },
     // 点击模态框取消按钮
     cancelDialog () {
-      this.$refs.ruleForm.resetFields()
+      // let isValid = false
+      // this.$refs.ruleForm.validate((valid) => {
+      //   if (valid) { isValid = true }
+      // })
+      // if (!isValid && this.updateButton) { return }
       this.dialogVisible = false
     },
+
     // 点击模态框的关闭按钮
     handleClose (done) {
       this.$confirm('confirm close？')
         .then(_ => {
           done()
-          this.$refs.ruleForm.resetFields()
         })
         .catch(_ => {
         })
@@ -271,16 +275,22 @@ export default {
   }
 
   .message-box {
-    background-color: #dff0d7;
     border-radius: 5px;
     margin-bottom: 30px;
-    padding: 20px;
-    padding-left: 50px;
+    padding: 20px 20px 20px 50px;
     display: flex;
     justify-content: start;
     align-items: center;
     color: #3c783c;
     font-size: 18px;
+    background-color: #dff0d7;
+  }
+
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+  }
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
   }
 
   .bread-crumb {
@@ -307,5 +317,8 @@ export default {
     align-items: center;
   }
 
+  el-table--border td, .el-table--border th, .el-table__body-wrapper .el-table--border.is-scrolling-left~.el-table__fixed {
+    border-right: 1px solid #e0e0e0;
+  }
 
 </style>

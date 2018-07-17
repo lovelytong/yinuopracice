@@ -1,18 +1,18 @@
 <template>
   <div id="app">
-    <!--顶层菜单-->
+    <!--顶层菜单,响应式布局-->
     <div class="header">
       <el-row class="header-container">
-        <el-col class="header-title" :lg="4" :md="4" :sm="4">
+        <el-col class="header-title" :lg="4" :md="4" :sm="4" :xs="4">
           <div>PROJECT<span style="color: #658bb1">BOX</span></div>
         </el-col>
-        <el-col :lg="13" :md="8" :sm="8" class="header-title">
+        <el-col :lg="13" :md="8" :sm="8" :xs="8" class="header-title">
           <div></div>
         </el-col>
-        <el-col class="header-icon" :lg="3" :md="6" :sm="6">
+        <el-col class="header-icon" :lg="3" :md="6" :sm="6" :xs="6">
           <img src="@/assets/header1.png">
         </el-col>
-        <el-col class="header-admin" :lg="4" :md="6" :sm="6">
+        <el-col class="header-admin" :lg="4" :md="6" :sm="6" :xs="6">
           <img src="@/assets/header2.png">
         </el-col>
       </el-row>
@@ -32,7 +32,7 @@
               </div>
             </div>
             <div>
-              <div class="team-title" @click="menuShow = !menuShow" v-bind:class="{ selectcolor: menuShow }" style="padding-top: 20px">
+              <div class="team-title" @click="menuShow = !menuShow" v-bind:class="{ selectcolor: menuShow }" >
                 <div>
                   <i class="el-icon-edit"></i>&#8195;
                   Team
@@ -189,7 +189,7 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: 10px 20px;
     color: white;
     font-size: 16px;
     font-weight: bolder;
@@ -203,10 +203,10 @@ export default {
   .team-title {
     display: flex;
     justify-content: space-between;
-    padding: 10px 20px;
+    padding: 11px 20px;
     font-weight: bolder;
     cursor: pointer;
-    height: 30px;
+    height: 20px;
     color: white;
   }
 
