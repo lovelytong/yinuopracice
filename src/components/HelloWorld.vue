@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div>
     <!--提示框，正常情况下隐藏，提交表单成功或者失败给出提示，三秒后再次隐藏,带有淡出的动画效果-->
     <transition name="fade">
       <div class="message-box" v-if="boxShow">
@@ -166,7 +166,8 @@ export default {
     },
     // 点击编辑按钮
     handleEdit (index, row) {
-      this.ruleForm = JSON.parse(JSON.stringify(row))
+      // this.ruleForm = JSON.parse(JSON.stringify(row))
+      this.ruleForm = Object.assign({}, row)
       this.editRow = index
       this.updateButton = true
       this.submitButton = false
@@ -263,16 +264,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
-  .main {
-    background-color: #eeeeee;
-    height: 100%;
-    overflow: auto;
-    padding-left: 50px;
-    padding-right: 50px;
-    padding-top: 20px;
-  }
+<style>
 
   .message-box {
     border-radius: 5px;

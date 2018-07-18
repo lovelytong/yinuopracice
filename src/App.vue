@@ -18,9 +18,9 @@
       </el-row>
     </div>
     <!--左侧菜单-->
-    <el-row style="height: 95%;">
-      <el-col :span="4" style="height: 100%;min-width: 300px;">
-        <div class="menu-background" style="height: 100%;">
+    <el-row>
+      <el-col :span="4" style="min-width: 300px;">
+        <div class="menu-background">
           <div class="menu">
             <div v-for="item in menuData1" :key="item.id">
               <div class="main-item">
@@ -32,7 +32,7 @@
               </div>
             </div>
             <div>
-              <div class="team-title" @click="menuShow = !menuShow" v-bind:class="{ selectcolor: menuShow }" >
+              <div class="team-title" @click="menuShow = !menuShow" v-bind:class="{ selectcolor: menuShow }">
                 <div>
                   <i class="el-icon-edit"></i>&#8195;
                   Team
@@ -42,7 +42,8 @@
               <div class="team-content" v-if="menuShow">
                 <div class="team-content-li" style="color: #56C7F2;margin-bottom: 10px">
                   <i class="el-icon-arrow-right"></i>&#8195;
-                  Manage</div>
+                  Manage
+                </div>
                 <div class="team-content-li" style="padding-bottom: 15px">
                   <i class="el-icon-arrow-right"></i>&#8195;
                   Groups
@@ -65,7 +66,7 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="20" class="main" style="height: 100%;max-width: calc(100% - 300px)">
+      <el-col :span="20" class="main">
         <!--主体内容部分，路由动态显示-->
         <router-view/>
       </el-col>
@@ -130,8 +131,8 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     user-select: none;
-    height: 900px;
     min-width: 1024px;
+    height: calc(100vh - 10px);
   }
 
   * {
@@ -175,9 +176,9 @@ export default {
   }
 
   .menu {
-    height: 101%;
     background-color: #658bb1;
     padding-top: 10px;
+    height: calc(100vh - 80px);
   }
 
   .menu-background {
@@ -197,7 +198,7 @@ export default {
   }
 
   .main-item:hover {
-    background-color:  #445C74;
+    background-color: #445C74;
   }
 
   .team-title {
@@ -211,23 +212,32 @@ export default {
   }
 
   .team-title:hover {
-    background-color:  #445C74;
+    background-color: #445C74;
   }
 
   .selectcolor {
     background-color: #445C74;
   }
 
-  .team-content{
-    width: 100%;
-    background-color:#587899 ;
+  .team-content {
+    background-color: #587899;
     font-weight: bolder;
     cursor: pointer;
     color: white;
   }
 
-  .team-content-li{
-    padding:15px 10px 0 40px;
+  .team-content-li {
+    padding: 15px 10px 0 40px;
+  }
+
+  .main {
+    background-color: #eeeeee;
+    overflow: auto;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 20px;
+    max-width: calc(100% - 300px);
+    height: calc(100vh - 70px);
   }
 
 </style>
