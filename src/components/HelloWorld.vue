@@ -24,7 +24,10 @@
           <el-input v-model.trim="ruleForm.name" style="width: 90%;"></el-input>
         </el-form-item>
         <el-form-item label="Group" prop="group">
-          <el-input v-model.trim="ruleForm.group" style="width: 90%;"></el-input>
+          <el-select v-model.trim="ruleForm.group" placeholder="choose group" style="width: 90%;">
+            <el-option label="Admin" value="Admin"></el-option>
+            <el-option label="customer" value="customer"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -50,6 +53,9 @@
           <div>
             <img src="@/assets/content1.png"/>
           </div>
+          <el-input placeholder="search by username" v-model="searchItem" class="input-with-select" style="width: 30%" @keyup.native.enter="search">
+            <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+          </el-input>
           <div>
             <el-button type="primary" size="mini" @click="openAddDialog">Add User</el-button>
           </div>
@@ -80,6 +86,10 @@
             prop="group"
             label="Group">
           </el-table-column>
+          <el-table-column
+            prop="date"
+            label="Date">
+          </el-table-column>
           <el-table-column label="Options" width="180">
             <template slot-scope="scope">
               <el-button
@@ -103,8 +113,22 @@
 <script>
 export default {
   name: 'HelloWorld',
-  data () {
+  data: function () {
+    var checkEmail = (rule, value, callback) => {
+      const testEmail = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/
+      if (!value) {
+        return callback(new Error('邮件不能为空'))
+      }
+      if (testEmail.test(value)
+      ) {
+        return callback()
+      } else {
+        return callback(new Error('请输入正确格式的邮箱'))
+      }
+    }
     return {
+      searchItem: '',
+      creatDate: '',
       // 控制模态框的变量
       dialogVisible: false,
       dialogName: '',
@@ -126,17 +150,19 @@ export default {
         email: 'admin@admin.com',
         username: 'admin',
         name: 'Project Admin',
-        group: 'Admin'
+        group: 'Admin',
+        date: '2018年07月15日'
       }, {
         email: 'test@test.com',
         username: 'test',
         name: 'test test2',
-        group: 'Admin'
+        group: 'Admin',
+        date: '2018年07月15日'
       }],
       // 表单验证
       rules: {
         email: [
-          {required: true, message: 'Please enter!', trigger: 'blur'}
+          {required: true, validator: checkEmail, trigger: 'blur'}
         ],
         username: [
           {required: true, message: 'Please enter!', trigger: 'blur'}
@@ -145,12 +171,28 @@ export default {
           {required: true, message: 'Please enter!', trigger: 'blur'}
         ],
         group: [
-          {required: true, message: 'Please enter!', trigger: 'blur'}
+          {required: true, message: 'Please enter!', trigger: 'change'}
         ]
       }
     }
   },
   methods: {
+    search () {
+      console.log(this.searchItem)
+      for (let item of this.tableData) {
+        console.log(item.username)
+      }
+    },
+    dateString: function (arr) {
+      let formatDate = arr.split('/')
+      for (let i = 0, l = formatDate.length; i < l; i++) {
+        let thisFormDate = formatDate[i]
+        if (thisFormDate.length < 2) {
+          formatDate[i] = '0' + thisFormDate
+        }
+      }
+      return formatDate[0] + '年' + formatDate[1] + '月' + formatDate[2] + '日'
+    },
     // 点击新增按钮
     openAddDialog () {
       this.updateButton = false
@@ -161,12 +203,12 @@ export default {
         email: '',
         username: '',
         name: '',
-        group: ''
+        group: '',
+        date: ''
       }
     },
     // 点击编辑按钮
     handleEdit (index, row) {
-      // this.ruleForm = JSON.parse(JSON.stringify(row))
       this.ruleForm = Object.assign({}, row)
       this.editRow = index
       this.updateButton = true
@@ -208,8 +250,9 @@ export default {
     },
     // 点击模态框里的submit按钮
     submitForm: function () {
+      this.creatTime = new Date().toLocaleDateString()
       let isValid = false
-      // let obj = JSON.parse(JSON.stringify(this.ruleForm))
+      this.ruleForm.date = this.dateString(this.creatTime)
       let obj = Object.assign({}, this.ruleForm)
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
@@ -242,11 +285,6 @@ export default {
     },
     // 点击模态框取消按钮
     cancelDialog () {
-      // let isValid = false
-      // this.$refs.ruleForm.validate((valid) => {
-      //   if (valid) { isValid = true }
-      // })
-      // if (!isValid && this.updateButton) { return }
       this.dialogVisible = false
     },
 
@@ -281,7 +319,9 @@ export default {
   .fade-enter-active, .fade-leave-active {
     transition: opacity .5s;
   }
-  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+
+  .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */
+  {
     opacity: 0;
   }
 
@@ -309,7 +349,7 @@ export default {
     align-items: center;
   }
 
-  el-table--border td, .el-table--border th, .el-table__body-wrapper .el-table--border.is-scrolling-left~.el-table__fixed {
+  el-table--border td, .el-table--border th, .el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed {
     border-right: 1px solid #e0e0e0;
   }
 
