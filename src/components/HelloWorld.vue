@@ -53,7 +53,8 @@
           <div>
             <img src="@/assets/content1.png"/>
           </div>
-          <el-input placeholder="search by username" v-model="searchItem" class="input-with-select" style="width: 30%" @keyup.native.enter="search">
+          <el-input placeholder="search by username" v-model="searchItem" class="input-with-select" style="width: 30%"
+                    @keyup.native.enter="search">
             <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
           </el-input>
           <div>
@@ -74,9 +75,10 @@
           >
           </el-table-column>
           <el-table-column
-            prop="username"
-            label="Username"
-          >
+            label="Username">
+            <template slot-scope="scope" >
+              <p><span v-html="scope.row.username"></span></p>
+            </template>
           </el-table-column>
           <el-table-column
             prop="name"
@@ -127,7 +129,7 @@ export default {
       }
     }
     return {
-      searchItem: '',
+      searchItem: null,
       creatDate: '',
       // 控制模态框的变量
       dialogVisible: false,
@@ -178,11 +180,21 @@ export default {
   },
   methods: {
     search () {
-      console.log(this.searchItem)
+      let arr = []
+      // for (let i = 0, l = this.searchItem.length; i < l; i++) {
+      //   if (this.tableData[i].username.indexOf(this.searchItem) >= 0) {
+      //     arr.push(this.tableData[i].username)
+      //   }
+      // }
+      // console.log(this.searchItem)
       for (let item of this.tableData) {
-        console.log(item.username)
+        if (item.username.includes(this.searchItem)) {
+          arr.push(item.username)
+        }
       }
+      console.log(arr)
     },
+
     dateString: function (arr) {
       let formatDate = arr.split('/')
       for (let i = 0, l = formatDate.length; i < l; i++) {
