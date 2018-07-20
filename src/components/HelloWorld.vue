@@ -25,7 +25,7 @@
         </el-form-item>
         <el-form-item label="Group" prop="group">
           <el-select v-model.trim="ruleForm.group" placeholder="choose group" style="width: 90%;">
-            <el-option label="Admin" value="Admin"></el-option>
+            <el-option label="admin" value="admin"></el-option>
             <el-option label="customer" value="customer"></el-option>
           </el-select>
         </el-form-item>
@@ -53,10 +53,18 @@
           <div>
             <img src="@/assets/content1.png"/>
           </div>
-          <el-input placeholder="search by username" v-model="searchItem" class="input-with-select" style="width: 30%"
-                    @keyup.native.enter="search">
-            <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
-          </el-input>
+
+
+          <div style="width: 30%">
+
+            <el-input placeholder="search by username" v-model="searchItem"
+                      @keyup.native.enter="search" :clearable=true>
+              <el-button @click = "resetSearch" slot="prepend">reset</el-button>
+              <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+            </el-input>
+          </div>
+
+
           <div>
             <el-button type="primary" size="mini" @click="openAddDialog">Add User</el-button>
           </div>
@@ -117,15 +125,15 @@ export default {
   name: 'HelloWorld',
   data: function () {
     var checkEmail = (rule, value, callback) => {
-      const testEmail = /^[a-z0-9]+([._\\-]*[a-z0-9])*@([a-z0-9]+[-a-z0-9]*[a-z0-9]+.){1,63}[a-z0-9]+$/
+      const testEmail = /^([\w-_]+(?:\.[\w-_]+)*)@((?:[a-z0-9]+(?:-[a-zA-Z0-9]+)*)+\.[a-z]{1,8})$/
       if (!value) {
-        return callback(new Error('邮件不能为空'))
+        return callback(new Error('can not be empty!'))
       }
       if (testEmail.test(value)
       ) {
         return callback()
       } else {
-        return callback(new Error('请输入正确格式的邮箱'))
+        return callback(new Error('please enter the right format'))
       }
     }
     return {
@@ -145,33 +153,38 @@ export default {
         email: '',
         username: '',
         name: '',
-        group: ''
+        group: '',
+        isfilter: false
       },
       // 表格数据
       tableData: [{
         email: 'admin@admin.com',
         username: 'admin',
         name: 'Project Admin',
-        group: 'Admin',
-        date: '2018年07月15日'
+        group: 'admin',
+        date: '2018年07月15日',
+        isfilter: true
       }, {
         email: 'test@test.com',
         username: 'test',
         name: 'test test2',
-        group: 'Admin',
-        date: '2018年07月15日'
+        group: 'customer',
+        date: '2018年07月15日',
+        isfilter: true
       }, {
         email: 'test@test.com',
         username: 'test',
         name: 'test test2',
-        group: 'Admin',
-        date: '2018年07月15日'
+        group: 'customer',
+        date: '2018年07月15日',
+        isfilter: true
       }, {
         email: 'test@test.com',
         username: 'test',
         name: 'test test2',
-        group: 'Admin',
-        date: '2018年07月15日'
+        group: 'admin',
+        date: '2018年07月15日',
+        isfilter: true
       }],
       // 表单验证
       rules: {
@@ -194,29 +207,35 @@ export default {
 
   },
   methods: {
+    resetSearch () {
+      if (this.copyTableData.length) {
+        this.tableData = this.copyTableData
+      }
+      for (let i = 0, l = this.tableData.length; i < l; i++) {
+        this.tableData[i].username = this.tableData[i].username.replace(/<span>|<\/span>/g, '')
+        this.tableData[i].isfilter = true
+      }
+    },
     search () {
       let arr = []
       for (let i = 0, l = this.tableData.length; i < l; i++) {
         this.tableData[i].username = this.tableData[i].username.replace(/<span>|<\/span>/g, '')
         if (this.tableData[i].username.indexOf(this.searchItem) >= 0) {
+          this.tableData[i].isfilter = false
           arr.push(i)
         }
       }
+      this.copyTableData = Object.assign([], this.tableData)
       if (arr.length > 0) {
-        // const strSpanstart = '<span style="color:red">', strSpanend = '</span>'
-        // i.replace(/<[^<>]+p>/ig,"");这样写
-
-        // const exp = '/(<span>*) | (<\/span>*$)/g'
-        // let reg1 = new RegExp(strSpanstart, 'g')
-        // let reg2 = new RegExp(strSpanend, 'g')
         let reg = new RegExp(this.searchItem, 'g')
         for (let index of arr) {
-          // this.tableData[index].username = this.tableData[index].username.replace(/<span>|<\/span>/g, '')
-          // this.tableData[index].username = this.tableData[index].username.replace(reg1, '')
-          // this.tableData[index].username = this.tableData[index].username.replace(reg2, '')
           this.tableData[index].username = this.tableData[index].username.replace(reg, '<span>' + this.searchItem + '</span>')
         }
+        this.tableData = this.tableData.filter((item) => {
+          return item.isfilter === false
+        })
       }
+      console.log(this.copyTableData)
     },
 
     dateString: function (arr) {
@@ -235,13 +254,13 @@ export default {
       this.submitButton = true
       this.dialogName = 'Add User'
       this.dialogVisible = true
-      // this.ruleForm = {
-      //   email: '',
-      //   username: '',
-      //   name: '',
-      //   group: '',
-      //   date: ''
-      // }
+      this.ruleForm = {
+        email: '',
+        username: '',
+        name: '',
+        group: '',
+        date: ''
+      }
       this.$refs.ruleForm.resetFields()
     },
     // 点击编辑按钮
@@ -391,5 +410,6 @@ export default {
   el-table--border td, .el-table--border th, .el-table__body-wrapper .el-table--border.is-scrolling-left ~ .el-table__fixed {
     border-right: 1px solid #e0e0e0;
   }
+
 
 </style>
