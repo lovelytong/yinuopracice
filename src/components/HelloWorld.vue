@@ -76,8 +76,8 @@
           </el-table-column>
           <el-table-column
             label="Username">
-            <template slot-scope="scope" >
-              <p><span v-html="scope.row.username"></span></p>
+            <template slot-scope="scope">
+              <p v-html="scope.row.username" class="father"></p>
             </template>
           </el-table-column>
           <el-table-column
@@ -173,26 +173,37 @@ export default {
           {required: true, message: 'Please enter!', trigger: 'blur'}
         ],
         group: [
-          {required: true, message: 'Please enter!', trigger: 'change'}
+          {required: true, message: 'Please choose!', trigger: 'change'}
         ]
       }
     }
   },
+  computed: {
+
+  },
   methods: {
     search () {
       let arr = []
-      // for (let i = 0, l = this.searchItem.length; i < l; i++) {
-      //   if (this.tableData[i].username.indexOf(this.searchItem) >= 0) {
-      //     arr.push(this.tableData[i].username)
-      //   }
-      // }
-      // console.log(this.searchItem)
-      for (let item of this.tableData) {
-        if (item.username.includes(this.searchItem)) {
-          arr.push(item.username)
+      for (let i = 0, l = this.tableData.length; i < l; i++) {
+        if (this.tableData[i].username.indexOf(this.searchItem) >= 0) {
+          arr.push(i)
         }
       }
-      console.log(arr)
+      if (arr.length > 0) {
+        // const strSpanstart = '<span style="color:red">', strSpanend = '</span>'
+        // i.replace(/<[^<>]+p>/ig,"");这样写
+
+        // const exp = '/(<span>*) | (<\/span>*$)/g'
+        // let reg1 = new RegExp(strSpanstart, 'g')
+        // let reg2 = new RegExp(strSpanend, 'g')
+        let reg = new RegExp(this.searchItem, 'g')
+        for (let index of arr) {
+          this.tableData[index].username = this.tableData[index].username.replace(/<span>|<\/span>/g, '')
+          // this.tableData[index].username = this.tableData[index].username.replace(reg1, '')
+          // this.tableData[index].username = this.tableData[index].username.replace(reg2, '')
+          this.tableData[index].username = this.tableData[index].username.replace(reg, '<span>' + this.searchItem + '</span>')
+        }
+      }
     },
 
     dateString: function (arr) {
@@ -211,13 +222,14 @@ export default {
       this.submitButton = true
       this.dialogName = 'Add User'
       this.dialogVisible = true
-      this.ruleForm = {
-        email: '',
-        username: '',
-        name: '',
-        group: '',
-        date: ''
-      }
+      // this.ruleForm = {
+      //   email: '',
+      //   username: '',
+      //   name: '',
+      //   group: '',
+      //   date: ''
+      // }
+      this.$refs.ruleForm.resetFields()
     },
     // 点击编辑按钮
     handleEdit (index, row) {
@@ -315,7 +327,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-
+  .father span {
+    color:red
+  }
   .message-box {
     border-radius: 5px;
     margin-bottom: 30px;
