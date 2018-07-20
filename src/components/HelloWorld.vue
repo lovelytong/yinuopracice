@@ -160,6 +160,18 @@ export default {
         name: 'test test2',
         group: 'Admin',
         date: '2018年07月15日'
+      }, {
+        email: 'test@test.com',
+        username: 'test',
+        name: 'test test2',
+        group: 'Admin',
+        date: '2018年07月15日'
+      }, {
+        email: 'test@test.com',
+        username: 'test',
+        name: 'test test2',
+        group: 'Admin',
+        date: '2018年07月15日'
       }],
       // 表单验证
       rules: {
@@ -185,6 +197,7 @@ export default {
     search () {
       let arr = []
       for (let i = 0, l = this.tableData.length; i < l; i++) {
+        this.tableData[i].username = this.tableData[i].username.replace(/<span>|<\/span>/g, '')
         if (this.tableData[i].username.indexOf(this.searchItem) >= 0) {
           arr.push(i)
         }
@@ -198,7 +211,7 @@ export default {
         // let reg2 = new RegExp(strSpanend, 'g')
         let reg = new RegExp(this.searchItem, 'g')
         for (let index of arr) {
-          this.tableData[index].username = this.tableData[index].username.replace(/<span>|<\/span>/g, '')
+          // this.tableData[index].username = this.tableData[index].username.replace(/<span>|<\/span>/g, '')
           // this.tableData[index].username = this.tableData[index].username.replace(reg1, '')
           // this.tableData[index].username = this.tableData[index].username.replace(reg2, '')
           this.tableData[index].username = this.tableData[index].username.replace(reg, '<span>' + this.searchItem + '</span>')
