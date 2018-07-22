@@ -208,6 +208,7 @@ export default {
   },
   methods: {
     resetSearch () {
+      this.searchItem = ''
       if (this.copyTableData.length) {
         this.tableData = this.copyTableData
       }
@@ -235,7 +236,6 @@ export default {
           return item.isfilter === false
         })
       }
-      console.log(this.copyTableData)
     },
 
     dateString: function (arr) {
